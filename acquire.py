@@ -19,7 +19,7 @@ import os
 *------------------*
 '''
 # ------------------------------------------------------------------------------------
-def get_blog_articles(url):
+def get_blog_articles():
     """
     Scrape the blog articles from the given URL and return them as a pandas DataFrame.
 
@@ -31,6 +31,9 @@ def get_blog_articles(url):
     Returns:
     df_articles (DataFrame): A DataFrame with the title and content of each article.
     """
+    # Define the base URL
+    url = 'https://codeup.com/blog/'
+    
     # Remove the maximum column width limit
     pd.set_option('display.max_colwidth', None)
 
@@ -39,7 +42,7 @@ def get_blog_articles(url):
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.content, "html.parser")
 
-    articles = []
+    blog_articles = []
 
     # Find the article links
     article_links = soup.find_all('h2', class_='entry-title')
@@ -55,7 +58,7 @@ def get_blog_articles(url):
         content = content.replace('\n', ' ')
 
         # Add the title and content to the list of articles
-        articles.append({
+        blog_articles.append({
             'title': title,
             'content': content
         })
@@ -63,7 +66,7 @@ def get_blog_articles(url):
     # Note: The url of Inshorts may have changed since this function was written, 
     # so the BeautifulSoup selectors may need to be updated.
 
-    return articles
+    return blog_articles
 
 # ------------------------------------------------------------------------------------
 def get_news_articles():
@@ -85,7 +88,7 @@ def get_news_articles():
     base_url = 'https://inshorts.com/en/read/'
 
     # Initialize an empty list to store the articles
-    articles = []
+    news_articles = []
 
     # Loop over each category
     for category in categories:
@@ -107,7 +110,7 @@ def get_news_articles():
             content = card.find('div', itemprop='articleBody').text
 
             # Add the title, content, and category to the list of articles
-            articles.append({
+            news_articles.append({
                 'category': category,
                 'title': title,
                 'content': content
@@ -118,4 +121,4 @@ def get_news_articles():
     # so the BeautifulSoup selectors may need to be updated.
 
     # Return the list of articles (dictionary)
-    return articles
+    return news_articles
