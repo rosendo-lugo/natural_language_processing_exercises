@@ -203,3 +203,23 @@ def clean(text):
     
     return cleaned_words
 
+# ------------------------------------------------------------------------------------
+def clean(text: str) -> list: 
+    """A simple function to cleanup text data"""
+    
+    #remove non-ascii characters & lower
+    text = (text.encode('ascii', 'ignore')
+                .decode('utf-8', 'ignore')
+                .lower())
+    
+    #remove special characters
+    words = re.sub(r'[^\w\s]', '', text).split()
+    
+    #build the lemmatizer
+    wnl = nltk.stem.WordNetLemmatizer()
+    
+    #getting all stopwords
+    stopwords = set(nltk.corpus.stopwords.words('english'))
+    
+    return [wnl.lemmatize(word) for word in words if word not in stopwords]
+
